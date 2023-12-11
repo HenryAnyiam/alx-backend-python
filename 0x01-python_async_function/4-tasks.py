@@ -4,9 +4,19 @@
 
 import asyncio
 from typing import List
+from random import uniform
 
 
-task_wait_random = __import__('3-tasks').task_wait_random
+async def wait_random(max_delay: int = 10) -> float:
+    """wait for a random amunt of time and return time"""
+    time: float = uniform(0, max_delay)
+    await asyncio.sleep(time)
+    return time
+
+
+def task_wait_random(max_delay: int) -> asyncio.Task:
+    """return an async task"""
+    return asyncio.create_task(wait_random(max_delay))
 
 
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
