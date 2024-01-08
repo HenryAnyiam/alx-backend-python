@@ -4,7 +4,7 @@ the utils module"""
 
 
 from utils import access_nested_map as access
-from utils import get_json
+from utils import get_json, memoize
 from parameterized import parameterized
 import unittest
 from unittest.mock import patch, Mock, MagicMock
@@ -58,3 +58,28 @@ class TestGetJson(unittest.TestCase):
 
         mock_get.assert_called_once_with(url)
         self.assertEqual(res, payload)
+
+
+class TestMemoize(unittest.TestCase):
+    """write tests for the memoize decorator"""
+
+    def test_memoize(self) -> None:
+        """basic tests for the memoize class"""
+
+        class TestClass:
+            """simple class for testing"""
+
+            def a_method(self):
+                """random method"""
+                return 42
+
+            @memoize
+            def a_property(self):
+                """decorated method"""
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method') as mock_method:
+            test = TestClass()
+            test.a_property()
+            test.a_property()
+        mock_method.assert_called_once()
